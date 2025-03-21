@@ -7,16 +7,19 @@ Imports System.Net.NetworkInformation
 Partial Public Class FacilityDetails
         Inherits System.Web.UI.Page
 
-        Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-            If Not IsPostBack Then
-                ' Check if a facility ID was provided for editing
-                If Not String.IsNullOrEmpty(Request.QueryString("facid")) Then
-                    LoadFacility(Request.QueryString("facid"))
-                End If
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not User.Identity.IsAuthenticated Then
+            Response.Redirect("~/Login.aspx")
+        End If
+        If Not IsPostBack Then
+            ' Check if a facility ID was provided for editing
+            If Not String.IsNullOrEmpty(Request.QueryString("facid")) Then
+                LoadFacility(Request.QueryString("facid"))
             End If
-        End Sub
+        End If
+    End Sub
 
-        Private Sub LoadFacility(facilityId As String)
+    Private Sub LoadFacility(facilityId As String)
             Dim connStr As String = ConfigurationManager.ConnectionStrings("MembershipDB").ConnectionString
             Dim sql As String = "SELECT full_name, address1, city, state, zip FROM Facility WHERE ID = @ID;"
 

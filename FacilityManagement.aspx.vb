@@ -6,11 +6,14 @@ Imports System.Configuration
 Partial Public Class FacilityManagement
         Inherits System.Web.UI.Page
 
-        Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-            If Not IsPostBack Then
-                BindGrid()
-            End If
-        End Sub
+    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not User.Identity.IsAuthenticated Then
+            Response.Redirect("~/Login.aspx")
+        End If
+        If Not IsPostBack Then
+            BindGrid()
+        End If
+    End Sub
 
     Private Sub BindGrid()
         ' Retrieve the connection string from Web.config
