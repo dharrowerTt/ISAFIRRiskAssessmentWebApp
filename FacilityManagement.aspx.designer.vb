@@ -10,24 +10,16 @@
 Option Strict On
 Option Explicit On
 
-
-Partial Public Class SiteMaster
+Partial Public Class FacilityManagement
 
     '''<summary>
-    '''HeadContent control.
+    '''gvFacilities control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents HeadContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+    Protected WithEvents gvFacilities As Global.System.Web.UI.WebControls.GridView
 
-    '''<summary>
-    '''MainContent control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents MainContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
 End Class
+

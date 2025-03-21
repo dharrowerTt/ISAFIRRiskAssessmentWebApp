@@ -144,6 +144,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
+    <Content Include="FacilityManagement.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Global.asax" />
@@ -231,6 +232,13 @@
     <Compile Include="Default.aspx.designer.vb">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="FacilityManagement.aspx.designer.vb">
+      <DependentUpon>FacilityManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacilityManagement.aspx.vb">
+      <DependentUpon>FacilityManagement.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="ForgotPassword.aspx.designer.vb">
       <DependentUpon>ForgotPassword.aspx</DependentUpon>
     </Compile>
@@ -252,6 +260,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\MyExtensions\MyWebExtension.vb">
       <VBMyExtensionTemplateID>Microsoft.VisualBasic.Web.MyExtension</VBMyExtensionTemplateID>

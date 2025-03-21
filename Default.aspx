@@ -1,44 +1,50 @@
-﻿<%@ Page Title="Home Page" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="ISAFIRRiskAssessmentWebApp._Default" %>
+﻿<%@ Page Title="Home Dashboard" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="ISAFIRRiskAssessmentWebApp._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
-    <main>
-        <section class="row" aria-labelledby="aspnetTitle">
-            <h1 id="aspnetTitle">ASP.NET</h1>
-            <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-            <p><a href="http://www.asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-        </section>
-
-        <div class="row">
-            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-                <h2 id="gettingStartedTitle">Getting started</h2>
-                <p>
-                    ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-                A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
-                <h2 id="librariesTitle">Get more libraries</h2>
-                <p>
-                    NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="hostingTitle">
-                <h2 id="hostingTitle">Web Hosting</h2>
-                <p>
-                    You can easily find a web hosting company that offers the right mix of features and price for your applications.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-                </p>
-            </section>
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="mt-4">ISAFIR Risk Assessment Dashboard</h1>
+                <p class="lead">Welcome to the ISAFIR Risk Assessment Web Application. Use the dashboard below to view key metrics and navigate to main modules.</p>
+            </div>
         </div>
-    </main>
-
+        <!-- Summary Metrics -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Total Facilities</div>
+                    <div class="card-body">
+                        <h5 class="card-title">25</h5>
+                        <p class="card-text">Facilities currently registered in the system.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Average Risk Score</div>
+                    <div class="card-body">
+                        <h5 class="card-title">75</h5>
+                        <p class="card-text">Average risk score across all facilities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-header">Pending Assessments</div>
+                    <div class="card-body">
+                        <h5 class="card-title">5</h5>
+                        <p class="card-text">Assessments that require completion or review.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Buttons -->
+        <div class="row">
+            <div class="col text-center">
+                <a href="FacilityManagement.aspx" class="btn btn-lg btn-info m-2">Manage Facilities</a>
+                <a href="ThreatAssessment.aspx" class="btn btn-lg btn-secondary m-2">Start New Assessment</a>
+            </div>
+        </div>
+    </div>
 </asp:Content>
