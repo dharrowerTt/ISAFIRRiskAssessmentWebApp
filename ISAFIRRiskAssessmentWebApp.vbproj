@@ -145,6 +145,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
+    <Content Include="FacilityAdd.aspx" />
     <Content Include="FacilityDetails.aspx" />
     <Content Include="FacilityManagement.aspx" />
     <Content Include="favicon.ico" />
@@ -241,6 +242,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.vb">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacilityAdd.aspx.designer.vb">
+      <DependentUpon>FacilityAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacilityAdd.aspx.vb">
+      <DependentUpon>FacilityAdd.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="FacilityDetails.aspx.designer.vb">
       <DependentUpon>FacilityDetails.aspx</DependentUpon>
