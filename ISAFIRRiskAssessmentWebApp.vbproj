@@ -155,6 +155,7 @@
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="TesterSimulate.aspx" />
+    <Content Include="ThreatAssessment.aspx" />
     <Content Include="UserRoleManagement.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -315,6 +316,13 @@
     </Compile>
     <Compile Include="TesterSimulate.aspx.vb">
       <DependentUpon>TesterSimulate.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ThreatAssessment.aspx.designer.vb">
+      <DependentUpon>ThreatAssessment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ThreatAssessment.aspx.vb">
+      <DependentUpon>ThreatAssessment.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="UserRoleManagement.aspx.designer.vb">
