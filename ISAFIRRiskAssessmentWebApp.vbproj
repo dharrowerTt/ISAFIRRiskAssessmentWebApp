@@ -151,6 +151,7 @@
     <Content Include="Default.aspx" />
     <Content Include="FacilityAdd.aspx" />
     <Content Include="FacilityDetails.aspx" />
+    <Content Include="FacilityEdit.aspx" />
     <Content Include="FacilityManagement.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="ForgotPassword.aspx" />
@@ -283,13 +284,20 @@
     </Compile>
     <Compile Include="FacilityAdd.aspx.vb">
       <DependentUpon>FacilityAdd.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FacilityDetails.aspx.designer.vb">
       <DependentUpon>FacilityDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="FacilityDetails.aspx.vb">
       <DependentUpon>FacilityDetails.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="FacilityEdit.aspx.designer.vb">
+      <DependentUpon>FacilityEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FacilityEdit.aspx.vb">
+      <DependentUpon>FacilityEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="FacilityManagement.aspx.designer.vb">

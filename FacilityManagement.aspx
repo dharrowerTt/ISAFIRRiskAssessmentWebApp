@@ -13,6 +13,9 @@
     <div class="container mt-4">
         <h1>Facility Management</h1>
         <!-- GridView to be enhanced by DataTables -->
+        <asp:Button ID="btnAddFacility" runat="server" CssClass="btn btn-success mb-3" 
+            Text="Add New Facility" OnClick="btnAddFacility_Click" />
+
 <asp:GridView ID="gvFacilities" runat="server" AutoGenerateColumns="False" CssClass="display" GridLines="None" UseAccessibleHeader="True">
     <Columns>
         <asp:BoundField DataField="ID" HeaderText="ID" Visible="False" />

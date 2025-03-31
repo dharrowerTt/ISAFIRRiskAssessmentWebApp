@@ -44,12 +44,17 @@ Partial Public Class FacilityManagement
             AddHandler gvFacilities.RowCommand, AddressOf gvFacilities_RowCommand
         End Sub
 
-        Protected Sub gvFacilities_RowCommand(source As Object, e As GridViewCommandEventArgs)
-            If e.CommandName = "EditFacility" Then
-                Dim facId As String = e.CommandArgument.ToString()
-                ' Redirect to FacilityDetails.aspx with the facility ID for editing
-                Response.Redirect("FacilityDetails.aspx?facid=" & facId)
-            End If
-        End Sub
-    End Class
+    Protected Sub gvFacilities_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvFacilities.RowCommand
+        If e.CommandName = "EditFacility" Then
+            Dim facilityID As String = e.CommandArgument.ToString()
+            Response.Redirect("FacilityEdit.aspx?id=" & facilityID)
+        End If
+    End Sub
+
+    Protected Sub btnAddFacility_Click(sender As Object, e As EventArgs)
+        Response.Redirect("FacilityAdd.aspx")
+    End Sub
+
+
+End Class
 

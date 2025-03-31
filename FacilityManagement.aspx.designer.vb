@@ -10,7 +10,17 @@
 Option Strict On
 Option Explicit On
 
+
 Partial Public Class FacilityManagement
+
+    '''<summary>
+    '''btnAddFacility control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnAddFacility As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''gvFacilities control.
@@ -20,6 +30,4 @@ Partial Public Class FacilityManagement
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents gvFacilities As Global.System.Web.UI.WebControls.GridView
-
 End Class
-
