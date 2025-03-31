@@ -126,6 +126,10 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="AddFacility.aspx" />
+    <Content Include="AssessmentComplete.aspx" />
+    <Content Include="AssessmentDashboard.aspx" />
+    <Content Include="AssessmentStart.aspx" />
+    <Content Include="AssessmentView.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -230,6 +234,34 @@
     </Compile>
     <Compile Include="About.aspx.vb">
       <DependentUpon>About.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssessmentComplete.aspx.designer.vb">
+      <DependentUpon>AssessmentComplete.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssessmentComplete.aspx.vb">
+      <DependentUpon>AssessmentComplete.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssessmentDashboard.aspx.designer.vb">
+      <DependentUpon>AssessmentDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssessmentDashboard.aspx.vb">
+      <DependentUpon>AssessmentDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssessmentStart.aspx.designer.vb">
+      <DependentUpon>AssessmentStart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssessmentStart.aspx.vb">
+      <DependentUpon>AssessmentStart.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssessmentView.aspx.designer.vb">
+      <DependentUpon>AssessmentView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssessmentView.aspx.vb">
+      <DependentUpon>AssessmentView.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Contact.aspx.designer.vb">
