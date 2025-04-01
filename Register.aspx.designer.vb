@@ -23,11 +23,47 @@ Partial Public Class Register
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
-    '''CreateUserWizard1 control.
+    '''RegisterPanel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents CreateUserWizard1 As Global.System.Web.UI.WebControls.CreateUserWizard
+    Protected WithEvents RegisterPanel As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''txtFullName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtFullName As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtDepartment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtDepartment As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''ddlRole control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlRole As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''btnRegister control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnRegister As Global.System.Web.UI.WebControls.Button
 End Class

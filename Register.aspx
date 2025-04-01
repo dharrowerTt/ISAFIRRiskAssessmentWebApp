@@ -49,12 +49,26 @@
     <form id="form1" runat="server">
         <div class="form-container shadow">
             <h2 class="text-center mb-4" style="color: #3B1E54;">Register</h2>
-            <asp:CreateUserWizard ID="CreateUserWizard1" runat="server" FinishDestinationPageUrl="~/Login.aspx" CssClass="w-100">
-                <WizardSteps>
-                    <asp:CreateUserWizardStep runat="server" />
-                    <asp:CompleteWizardStep runat="server" />
-                </WizardSteps>
-            </asp:CreateUserWizard>
+<asp:Panel ID="RegisterPanel" runat="server">
+    <div class="mb-3">
+        <label for="txtFullName" class="form-label">Full Name</label>
+        <asp:TextBox ID="txtFullName" runat="server" CssClass="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="txtDepartment" class="form-label">Department</label>
+        <asp:TextBox ID="txtDepartment" runat="server" CssClass="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="ddlRole" class="form-label">Role</label>
+        <asp:DropDownList ID="ddlRole" runat="server" CssClass="form-select">
+            <asp:ListItem Text="Viewer" Value="Viewer" />
+            <asp:ListItem Text="Editor" Value="Editor" />
+            <asp:ListItem Text="Admin" Value="Admin" />
+        </asp:DropDownList>
+    </div>
+    <asp:Button ID="btnRegister" runat="server" CssClass="btn btn-primary w-100" Text="Submit Registration" OnClick="btnRegister_Click" />
+</asp:Panel>
+
         </div>
     </form>
 </body>

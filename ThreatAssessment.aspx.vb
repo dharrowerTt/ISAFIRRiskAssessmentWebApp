@@ -16,7 +16,7 @@ Partial Class ThreatHazardForm
     Private Sub LoadHazards()
         Dim dt As New DataTable()
         Using conn As New SqlConnection(connString)
-            Dim sql As String = @"
+            Dim sql As String = "
                 SELECT s.ID AS Subhazard_ID, s.Subhazard, s.Description,
                        t.rating AS Rating, t.Answer
                 FROM Subhazard_LU s
@@ -49,7 +49,7 @@ Partial Class ThreatHazardForm
                 Dim answerVal As Integer = If(chkApplicable.Checked, 1, 0)
 
                 ' UPSERT logic: if exists, update; else insert
-                Dim sql As String = @"
+                Dim sql As String = "
                     MERGE Threat AS target
                     USING (SELECT @AssessmentID AS assessment_id, @SubhazardID AS subhazard_LU_id) AS source
                     ON target.assessment_id = source.assessment_id AND target.subhazard_LU_id = source.subhazard_LU_id
