@@ -25,32 +25,57 @@ Public Class AssessmentStart
     End Sub
 
     Private Sub PreFillUserInfo()
-        Dim username As String = User.Identity.Name
-        txtAssessor.Text = username
-        txtEmail.Text = $"{username}@example.com" ' ← Update domain if needed
+        Dim email = User.Identity.Name
+        Dim firstName = ""
+        Dim lastName = ""
+        Dim phone = ""
+
+        Using conn As New SqlConnection(connString)
+            Dim cmd As New SqlCommand("SELECT FullName, Role, Phone, OktaEmail FROM appUserDetails WHERE OktaEmail = @Email", conn)
+            cmd.Parameters.AddWithValue("@Email", email)
+            conn.Open()
+            Dim reader = cmd.ExecuteReader()
+            If reader.Read() Then
+                Dim fullName = reader("FullName").ToString()
+                Dim parts = fullName.Split(" "c)
+                If parts.Length > 0 Then firstName = parts(0)
+                If parts.Length > 1 Then lastName = String.Join(" ", parts.Skip(1))
+                If Not IsDBNull(reader("Phone")) Then phone = reader("Phone").ToString()
+            End If
+        End Using
+
+        txtAssessor.Text = email
+        txtAssessorFirst.Text = firstName
+        txtAssessorLast.Text = lastName
+        txtEmail.Text = email
+        txtPhone.Text = phone
     End Sub
 
-    Protected Sub btnStart_Click(sender As Object, e As EventArgs)
+    Protected Sub btnStart_Click(sender As Object, e As EventArgs) Handles btnStart.Click
         Dim newId As Integer
+
         Using conn As New SqlConnection(connString)
             Dim cmd As New SqlCommand("
-                INSERT INTO Assessment (facility_id, assessor_first, assessor_last, assessor_phone, assessor_email, assessor, assessment_start, Current)
+                INSERT INTO Assessment (facility_id, assessor_first, assessor_last, assessor_phone, assessor_email, assessor, assessment_start, is_current)
                 OUTPUT INSERTED.ID
                 VALUES (@facility, @first, @last, @phone, @email, @assessor, GETDATE(), 1)
             ", conn)
 
-            cmd.Parameters.AddWithValue("@facility", ddlFacility.SelectedValue)
-            cmd.Parameters.AddWithValue("@first", txtAssessorFirst.Text)
-            cmd.Parameters.AddWithValue("@last", txtAssessorLast.Text)
-            cmd.Parameters.AddWithValue("@phone", txtPhone.Text)
-            cmd.Parameters.AddWithValue("@email", txtEmail.Text)
-            cmd.Parameters.AddWithValue("@assessor", txtAssessor.Text)
+            With cmd.Parameters
+                .AddWithValue("@facility", ddlFacility.SelectedValue)
+                .AddWithValue("@first", txtAssessorFirst.Text)
+                .AddWithValue("@last", txtAssessorLast.Text)
+                .AddWithValue("@phone", txtPhone.Text)
+                .AddWithValue("@email", txtEmail.Text)
+                .AddWithValue("@assessor", txtAssessor.Text)
+            End With
 
             conn.Open()
             newId = Convert.ToInt32(cmd.ExecuteScalar())
         End Using
 
-        Response.Redirect($"ThreatHazardForm.aspx?assessment_id={newId}")
+        ' Redirect directly to first step: terrorism
+        Response.Redirect($"ThreatAssessment.aspx?assessment_id={newId}&step=terrorism")
     End Sub
 
     Protected Sub btnCancel_Click(sender As Object, e As EventArgs)

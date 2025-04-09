@@ -20,32 +20,40 @@ Public Class FacilityEdit
     End Sub
 
     Private Sub PopulateDropdowns()
-        Using conn As New SqlConnection(connString)
-            conn.Open()
+        PopulateSector()
+        PopulateFacilityType()
+        PopulateCounty()
+    End Sub
 
-            ' Sector
-            Dim cmdSector = New SqlCommand("SELECT NIPP_id, sector FROM Sector_LU ORDER BY sector", conn)
-            ddlSector.DataSource = cmdSector.ExecuteReader()
+    Private Sub PopulateSector()
+        Using conn As New SqlConnection(connString)
+            Dim cmd = New SqlCommand("SELECT NIPP_id, sector FROM Sector_LU ORDER BY sector", conn)
+            conn.Open()
+            ddlSector.DataSource = cmd.ExecuteReader()
             ddlSector.DataValueField = "NIPP_id"
             ddlSector.DataTextField = "sector"
             ddlSector.DataBind()
             ddlSector.Items.Insert(0, New ListItem("-- Select Sector --", ""))
-            conn.Close()
+        End Using
+    End Sub
 
-            ' Facility Type
+    Private Sub PopulateFacilityType()
+        Using conn As New SqlConnection(connString)
+            Dim cmd = New SqlCommand("SELECT ID, type FROM FacilityType_LU ORDER BY type", conn)
             conn.Open()
-            Dim cmdType = New SqlCommand("SELECT ID, type FROM FacilityType_LU ORDER BY type", conn)
-            ddlFacilityType.DataSource = cmdType.ExecuteReader()
+            ddlFacilityType.DataSource = cmd.ExecuteReader()
             ddlFacilityType.DataValueField = "ID"
             ddlFacilityType.DataTextField = "type"
             ddlFacilityType.DataBind()
             ddlFacilityType.Items.Insert(0, New ListItem("-- Select Facility Type --", ""))
-            conn.Close()
+        End Using
+    End Sub
 
-            ' County
+    Private Sub PopulateCounty()
+        Using conn As New SqlConnection(connString)
+            Dim cmd = New SqlCommand("SELECT ID, County FROM County_LU ORDER BY County", conn)
             conn.Open()
-            Dim cmdCounty = New SqlCommand("SELECT ID, County FROM County_LU ORDER BY County", conn)
-            ddlCounty.DataSource = cmdCounty.ExecuteReader()
+            ddlCounty.DataSource = cmd.ExecuteReader()
             ddlCounty.DataValueField = "ID"
             ddlCounty.DataTextField = "County"
             ddlCounty.DataBind()
@@ -55,6 +63,8 @@ Public Class FacilityEdit
 
     Protected Sub ddlSector_SelectedIndexChanged(sender As Object, e As EventArgs)
         Dim sectorId = ddlSector.SelectedValue
+        If String.IsNullOrEmpty(sectorId) Then Return
+
         Using conn As New SqlConnection(connString)
             Dim cmd = New SqlCommand("SELECT ID, subsector FROM Subsector_LU WHERE sector_LU_NIPP_id=@sectorID ORDER BY subsector", conn)
             cmd.Parameters.AddWithValue("@sectorID", sectorId)
@@ -100,7 +110,7 @@ Public Class FacilityEdit
         End Using
     End Sub
 
-    Protected Sub btnSave_Click(sender As Object, e As EventArgs)
+    Protected Sub btnSaveChanges_Click(sender As Object, e As EventArgs)
         Dim facilityId = CInt(Request.QueryString("id"))
 
         Using conn As New SqlConnection(connString)

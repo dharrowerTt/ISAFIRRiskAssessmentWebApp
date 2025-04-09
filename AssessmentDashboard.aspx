@@ -40,11 +40,12 @@
         <asp:GridView ID="gvAssessments" runat="server" CssClass="table table-striped display"
             AutoGenerateColumns="False" DataKeyNames="ID">
             <Columns>
+                <asp:BoundField DataField="ID" HeaderText="ID" Visible="False" />
                 <asp:BoundField DataField="FacilityName" HeaderText="Facility" />
                 <asp:BoundField DataField="Assessor" HeaderText="Assessor" />
                 <asp:BoundField DataField="AssessmentStart" HeaderText="Start Date" DataFormatString="{0:g}" />
                 <asp:BoundField DataField="AssessmentEnd" HeaderText="End Date" DataFormatString="{0:g}" />
-                <asp:BoundField DataField="Current" HeaderText="Current" />
+                <asp:BoundField DataField="is_current" HeaderText="Current" />
                 <asp:TemplateField HeaderText="Action">
                     <ItemTemplate>
                         <asp:HyperLink ID="lnkView" runat="server"

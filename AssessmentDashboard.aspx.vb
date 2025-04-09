@@ -21,7 +21,7 @@ Public Class AssessmentDashboard
                     a.assessor,
                     a.assessment_start AS AssessmentStart,
                     a.assessment_end AS AssessmentEnd,
-                    CASE WHEN a.Current = 1 THEN 'Yes' ELSE 'No' END AS Current
+                    CASE WHEN a.is_current = 1 THEN 'Yes' ELSE 'No' END AS is_current
                 FROM Assessment a
                 INNER JOIN Facility f ON a.facility_id = f.ID
                 ORDER BY a.assessment_start DESC"

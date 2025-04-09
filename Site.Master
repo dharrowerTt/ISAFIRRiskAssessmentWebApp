@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="VB" AutoEventWireup="true" CodeBehind="Site.master.vb" Inherits="ISAFIRRiskAssessmentWebApp.SiteMaster" %>
+<%@ Import Namespace="ISAFIRRiskAssessmentWebApp" %>
 
 <!DOCTYPE html>
 
@@ -64,21 +65,33 @@
         </li>
       </ul>
 
-      <% If HttpContext.Current.User.Identity.IsAuthenticated Then %>
-        <div class="dropdown">
-          <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="userDropdown"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            
-            <span><%= HttpContext.Current.User.Identity.Name %></span>
-              <img src="images/avatar.svg" alt="user avatar" width="32" height="32" class="rounded-circle mr-2">
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="Logout.aspx">Log Out</a>
-          </div>
-        </div>
-      <% Else %>
-        <a href="Login.aspx" class="btn btn-light ml-2">Login</a>
-      <% End If %>
+<% If HttpContext.Current.User.Identity.IsAuthenticated Then %>
+  <div class="dropdown text-end">
+    <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" href="#" id="userDropdown"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="me-2"><%= HttpContext.Current.User.Identity.Name %></span>
+      <img src="images/avatar.svg" alt="user avatar" width="32" height="32" class="rounded-circle">
+    </a>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+      <h6 class="dropdown-header text-muted px-3">
+        Role: <%= Helpers.GetCurrentUserRole(HttpContext.Current.User) %>
+      </h6>
+      <div class="dropdown-divider"></div>
+<a class="dropdown-item" href="Help.aspx">Help</a>
+        <div class="dropdown-divider"></div>
+      <% If Helpers.GetCurrentUserRole(HttpContext.Current.User) = "Admin" Then %>
+    <a class="dropdown-item" href="UserRoleManagement.aspx">User Role Management</a>
+    <a class="dropdown-item" href="RoleFunctionManagement.aspx">Role Function Management</a>
+    <div class="dropdown-divider"></div>
+<% End If %>
+<a class="dropdown-item" href="Logout.aspx">Log Out</a>
+
+    </div>
+  </div>
+<% Else %>
+  <a href="Login.aspx" class="btn btn-light ml-2">Login</a>
+<% End If %>
+
     </div>
   </div>
 </nav>

@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col text-center">
                 <a href="FacilityManagement.aspx" class="btn btn-lg btn-info m-2">Manage Facilities</a>
-                <a href="ThreatAssessment.aspx" class="btn btn-lg btn-secondary m-2">Start New Assessment</a>
+                <a href="AssessmentStart.aspx" class="btn btn-lg btn-secondary m-2">Start New Assessment</a>
             </div>
         </div>
     </div>

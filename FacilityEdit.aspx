@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <!-- Step 4: Facility Point of Contact -->
+    <!-- Step 4: Point of Contact -->
     <div class="card my-4">
       <div class="card-header"><strong>Step 4: Facility Point of Contact</strong></div>
       <div class="card-body">
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <!-- Step 5: Facility Location Details -->
+    <!-- Step 5: Location Details -->
     <div class="card my-4">
       <div class="card-header"><strong>Step 5: Facility Location Details</strong></div>
       <div class="card-body">
@@ -129,25 +129,24 @@
     <asp:Button runat="server" ID="btnCancel" CssClass="btn btn-secondary ml-2" Text="Cancel" OnClick="btnCancel_Click" CausesValidation="false" />
   </div>
 
-  <!-- Explicitly wait until ol library is fully loaded -->
   <script>
-    window.onload = function () {
-      if (typeof ol === 'undefined') {
-        alert('OpenLayers failed to load.');
-        return;
-      }
+      window.onload = function () {
+          if (typeof ol === 'undefined') {
+              alert('OpenLayers failed to load.');
+              return;
+          }
 
-      var map = new ol.Map({
-        target: 'map',
-        layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
-        view: new ol.View({ center: ol.proj.fromLonLat([-87.6359, 41.8789]), zoom: 12 })
-      });
+          var map = new ol.Map({
+              target: 'map',
+              layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+              view: new ol.View({ center: ol.proj.fromLonLat([-87.6359, 41.8789]), zoom: 12 })
+          });
 
-      map.on('click', function (evt) {
-        var coord = ol.proj.toLonLat(evt.coordinate);
-        document.getElementById('<%=txtLongitude.ClientID%>').value = coord[0].toFixed(6);
+          map.on('click', function (evt) {
+              var coord = ol.proj.toLonLat(evt.coordinate);
+              document.getElementById('<%=txtLongitude.ClientID%>').value = coord[0].toFixed(6);
         document.getElementById('<%=txtLatitude.ClientID%>').value = coord[1].toFixed(6);
       });
-    };
+      };
   </script>
 </asp:Content>

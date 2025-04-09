@@ -11,104 +11,104 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class ThreatAssessment
+Partial Public Class AssessmentOverview
 
     '''<summary>
-    '''litAssessmentID control.
+    '''pnlOverview control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litAssessmentID As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents pnlOverview As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''litFacility control.
+    '''litAssessorInfo control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litFacility As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litAssessorInfo As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litAssessor control.
+    '''statusCards control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litAssessor As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents statusCards As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     '''<summary>
-    '''litContact control.
+    '''lnkThreat control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litContact As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lnkThreat As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''litStartDate control.
+    '''litThreatStatus control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litStartDate As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThreatStatus As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litSubhazard control.
+    '''lnkConsequence control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litSubhazard As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lnkConsequence As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''rblRatings control.
+    '''litConsequenceStatus control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rblRatings As Global.System.Web.UI.WebControls.RadioButtonList
+    Protected WithEvents litConsequenceStatus As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litExtraInfo control.
+    '''lnkLifelines control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litExtraInfo As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lnkLifelines As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''btnNext control.
+    '''litLifelinesStatus control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnNext As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents litLifelinesStatus As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''hfAssessmentID control.
+    '''lnkVulnerability control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfAssessmentID As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents lnkVulnerability As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''hfSubhazardID control.
+    '''litVulnerabilityStatus control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfSubhazardID As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents litVulnerabilityStatus As Global.System.Web.UI.WebControls.Literal
 End Class

@@ -125,9 +125,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="AccessDenied.aspx" />
     <Content Include="AddFacility.aspx" />
     <Content Include="AssessmentComplete.aspx" />
     <Content Include="AssessmentDashboard.aspx" />
+    <Content Include="AssessmentOverview.aspx" />
     <Content Include="AssessmentStart.aspx" />
     <Content Include="AssessmentView.aspx" />
     <Content Include="Contact.aspx" />
@@ -156,11 +158,15 @@
     <Content Include="favicon.ico" />
     <Content Include="ForgotPassword.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Help.aspx" />
     <Content Include="images\avatar.svg" />
+    <Content Include="images\terror.jpg" />
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="RoleFunctionManagement.aspx" />
     <Content Include="TesterSimulate.aspx" />
     <Content Include="ThreatAssessment.aspx" />
+    <Content Include="UserRoleEdit.aspx" />
     <Content Include="UserRoleManagement.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -221,6 +227,13 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessDenied.aspx.designer.vb">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AccessDenied.aspx.vb">
+      <DependentUpon>AccessDenied.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="AddFacility.aspx.designer.vb">
       <DependentUpon>AddFacility.aspx</DependentUpon>
     </Compile>
@@ -249,6 +262,13 @@
     </Compile>
     <Compile Include="AssessmentDashboard.aspx.vb">
       <DependentUpon>AssessmentDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssessmentOverview.aspx.designer.vb">
+      <DependentUpon>AssessmentOverview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssessmentOverview.aspx.vb">
+      <DependentUpon>AssessmentOverview.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="AssessmentStart.aspx.designer.vb">
@@ -317,6 +337,14 @@
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Help.aspx.designer.vb">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Help.aspx.vb">
+      <DependentUpon>Help.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Helpers.vb" />
     <Compile Include="Login.aspx.designer.vb">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
@@ -351,6 +379,13 @@
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="RoleFunctionManagement.aspx.designer.vb">
+      <DependentUpon>RoleFunctionManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RoleFunctionManagement.aspx.vb">
+      <DependentUpon>RoleFunctionManagement.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="TesterSimulate.aspx.designer.vb">
       <DependentUpon>TesterSimulate.aspx</DependentUpon>
     </Compile>
@@ -363,6 +398,13 @@
     </Compile>
     <Compile Include="ThreatAssessment.aspx.vb">
       <DependentUpon>ThreatAssessment.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="UserRoleEdit.aspx.designer.vb">
+      <DependentUpon>UserRoleEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserRoleEdit.aspx.vb">
+      <DependentUpon>UserRoleEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="UserRoleManagement.aspx.designer.vb">

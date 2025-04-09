@@ -1,77 +1,45 @@
-﻿<%@ Page Title="User Role Management" Language="vb" AutoEventWireup="false" 
-    MasterPageFile="~/Site.Master" CodeBehind="UserRoleManagement.aspx.vb"
-    Inherits="ISAFIRRiskAssessmentWebApp.UserRoleManagement" %>
+﻿<%@ Page Title="User Role Management" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="UserRoleManagement.aspx.vb" Inherits="ISAFIRRiskAssessmentWebApp.UserRoleManagement" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Data.SqlClient" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-  <!-- Any custom JS or CSS specific to this page could go here -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css" />
 </asp:Content>
 
-<asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
-<div class="container py-4">
-    <h2>User Role Management</h2>
-
-    <!-- User Selection -->
-    <div class="card my-4">
-        <div class="card-header"><strong>Select User</strong></div>
-        <div class="card-body">
-            <div class="form-group">
-                <asp:Label runat="server">User Account</asp:Label>
-                <asp:DropDownList runat="server" ID="ddlUserAccounts" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlUserAccounts_SelectedIndexChanged"/>
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlUserAccounts" InitialValue="" CssClass="text-danger"
-                    ErrorMessage="Selecting a user is required." />
-            </div>
-        </div>
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container mt-4">
+        <h1>User Role Management</h1>
+        <asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="False" CssClass="display" GridLines="None" UseAccessibleHeader="True">
+            <Columns>
+                <asp:BoundField DataField="UserName" HeaderText="Email" />
+                <asp:BoundField DataField="FullName" HeaderText="Name" />
+                <asp:BoundField DataField="Role" HeaderText="Role" />
+                <asp:TemplateField HeaderText="Actions">
+                    <ItemTemplate>
+                        <asp:LinkButton ID="lnkEditUser" runat="server" CssClass="btn btn-sm btn-info"
+                                        Text="Edit" CommandName="EditUser"
+                                        CommandArgument='<%# Eval("AppUserId") %>'></asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+        </asp:GridView>
     </div>
 
-    <!-- Role Assignment -->
-    <div class="card my-4">
-        <div class="card-header"><strong>Assign Role and Permissions</strong></div>
-        <div class="card-body">
-            <div class="form-group">
-                <asp:Label runat="server">Role</asp:Label>
-                <asp:DropDownList runat="server" ID="ddlRoles" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged">
-                    <asp:ListItem Text="" Value=""></asp:ListItem>
-                    <asp:ListItem Text="Admin" Value="Admin"></asp:ListItem>
-                    <asp:ListItem Text="Tester" Value="Tester"></asp:ListItem>
-                    <asp:ListItem Text="Facility Manager" Value="FacilityManager"></asp:ListItem>
-                    <asp:ListItem Text="Assessor" Value="Assessor"></asp:ListItem>
-                    <asp:ListItem Text="Supervisor" Value="Supervisor"></asp:ListItem>
-                    <asp:ListItem Text="Viewer" Value="Viewer"></asp:ListItem>
-                </asp:DropDownList>
-                <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlRoles" InitialValue="" CssClass="text-danger"
-                    ErrorMessage="Role selection is required." />
-            </div>
-
-            <!-- Dynamic permissions checkboxes -->
-            <asp:Panel ID="pnlPermissions" runat="server" Visible="false" CssClass="border p-3 mt-4">
-                <strong>Permissions:</strong>
-                <asp:CheckBoxList runat="server" ID="cblPermissions" CssClass="form-check mt-2">
-                    <!-- Items dynamically loaded from CodeBehind based on role selection -->
-                </asp:CheckBoxList>
-            </asp:Panel>
-
-            <!-- Facility assignment if applicable -->
-            <asp:Panel ID="pnlFacilityAssignment" runat="server" Visible="false" CssClass="border p-3 mt-4">
-                <strong>Assign Facilities:</strong>
-                <asp:CheckBoxList runat="server" ID="cblFacilityAssignments" CssClass="form-check mt-2">
-                    <!-- Facility names dynamically loaded from CodeBehind -->
-                </asp:CheckBoxList>
-            </asp:Panel>
-        </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <asp:Button runat="server" ID="btnSaveRole" CssClass="btn btn-primary" Text="Save Changes" OnClick="btnSaveRole_Click" />
-    <asp:Button runat="server" ID="btnCancel" CssClass="btn btn-secondary ml-2" Text="Cancel" OnClick="btnCancel_Click" CausesValidation="false" />
-
-    <!-- Audit Trail -->
-    <div class="card my-5">
-        <div class="card-header"><strong>Role Assignment Audit Trail</strong></div>
-        <div class="card-body">
-            <asp:GridView runat="server" ID="gvAuditTrail" CssClass="table table-bordered table-striped">
-                <!-- Audit trail data bound from CodeBehind -->
-            </asp:GridView>
-        </div>
-    </div>
-</div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#<%= gvUsers.ClientID %>").DataTable({
+                dom: 'Bfrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+        });
+    </script>
 </asp:Content>

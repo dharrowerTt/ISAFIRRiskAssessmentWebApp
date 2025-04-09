@@ -11,52 +11,25 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class AssessmentStart
+Partial Public Class UserRoleEdit
 
     '''<summary>
-    '''hfNewAssessmentID control.
+    '''pnlEdit control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfNewAssessmentID As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents pnlEdit As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''ddlFacility control.
+    '''txtFullName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddlFacility As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
-    '''txtAssessorFirst control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtAssessorFirst As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtAssessorLast control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtAssessorLast As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtAssessor control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtAssessor As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtFullName As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
     '''txtEmail control.
@@ -68,22 +41,22 @@ Partial Public Class AssessmentStart
     Protected WithEvents txtEmail As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''txtPhone control.
+    '''ddlRole control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtPhone As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlRole As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''btnStart control.
+    '''btnSave control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnStart As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''btnCancel control.
@@ -93,4 +66,13 @@ Partial Public Class AssessmentStart
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnCancel As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''lblMessage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblMessage As Global.System.Web.UI.WebControls.Label
 End Class

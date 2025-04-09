@@ -45,8 +45,13 @@
     <form id="form1" runat="server">
         <div class="form-container shadow">
             <h2 class="text-center mb-4" style="color: #3B1E54;">Login</h2>
-            <asp:Login ID="Login1" runat="server" DestinationPageUrl="~/Default.aspx" CssClass="w-100" DisplayRememberMe="true">
-            </asp:Login>
+<asp:Login ID="Login1" runat="server"
+           DestinationPageUrl="~/Default.aspx"
+           OnLoggedIn="Login1_LoggedIn"
+           CssClass="w-100"
+           DisplayRememberMe="true">
+</asp:Login>
+
         </div>
     </form>
 </body>

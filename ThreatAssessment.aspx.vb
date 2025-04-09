@@ -1,85 +1,150 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Configuration
 
-Partial Class ThreatHazardForm
+Partial Class ThreatAssessment
     Inherits System.Web.UI.Page
 
     Private ReadOnly connString As String = ConfigurationManager.ConnectionStrings("MembershipDB").ConnectionString
-    Private assessmentID As Integer = 1 ' Replace with session or querystring logic
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            LoadHazards()
+            Dim stepKey As String = Request.QueryString("step")
+            Dim assessmentId As String = Request.QueryString("assessment_id")
+
+            If String.IsNullOrEmpty(stepKey) OrElse String.IsNullOrEmpty(assessmentId) Then
+                Response.Redirect("AssessmentDashboard.aspx")
+            End If
+
+            hfAssessmentID.Value = assessmentId
+            LoadAssessmentDetails(Convert.ToInt32(assessmentId))
+            LoadThreatQuestion(stepKey.ToLower(), Convert.ToInt32(assessmentId))
         End If
     End Sub
 
-    Private Sub LoadHazards()
-        Dim dt As New DataTable()
+    Private Sub LoadAssessmentDetails(assessmentId As Integer)
         Using conn As New SqlConnection(connString)
-            Dim sql As String = @"
-                SELECT s.ID AS Subhazard_ID, s.Subhazard, s.Description,
-                       t.rating AS Rating, t.Answer
-                FROM Subhazard_LU s
-                LEFT JOIN Threat t
-                    ON s.ID = t.subhazard_LU_id AND t.assessment_id = @AssessmentID
-                ORDER BY s.Subhazard"
+            Dim cmd As New SqlCommand("
+                SELECT a.ID, a.assessor, a.assessor_first, a.assessor_last, a.assessor_phone, a.assessor_email,
+                       a.assessment_start, f.full_name
+                FROM Assessment a
+                INNER JOIN Facility f ON a.facility_id = f.ID
+                WHERE a.ID = @ID", conn)
+            cmd.Parameters.AddWithValue("@ID", assessmentId)
 
-            Using cmd As New SqlCommand(sql, conn)
-                cmd.Parameters.AddWithValue("@AssessmentID", assessmentID)
-                Using da As New SqlDataAdapter(cmd)
-                    da.Fill(dt)
-                End Using
-            End Using
+            conn.Open()
+            Dim reader = cmd.ExecuteReader()
+            If reader.Read() Then
+                litAssessmentID.Text = reader("ID").ToString()
+                litFacility.Text = reader("full_name").ToString()
+                litAssessor.Text = $"{reader("assessor_first")} {reader("assessor_last")}"
+                litContact.Text = $"{reader("assessor_phone")} / {reader("assessor_email")}"
+                litStartDate.Text = Convert.ToDateTime(reader("assessment_start")).ToString("g")
+            End If
         End Using
-
-        gvHazards.DataSource = dt
-        gvHazards.DataBind()
     End Sub
 
-    Protected Sub btnSave_Click(sender As Object, e As EventArgs)
+    Private Sub LoadThreatQuestion(stepKey As String, assessmentId As Integer)
+        Dim subhazardId As Integer = -1
+
         Using conn As New SqlConnection(connString)
             conn.Open()
-            For Each row As GridViewRow In gvHazards.Rows
-                Dim subhazardID As Integer = Convert.ToInt32(gvHazards.DataKeys(row.RowIndex).Value)
-                Dim txtRating As TextBox = CType(row.FindControl("txtRating"), TextBox)
-                Dim chkApplicable As CheckBox = CType(row.FindControl("chkApplicable"), CheckBox)
 
-                Dim ratingVal As Decimal = 0
-                Decimal.TryParse(txtRating.Text, ratingVal)
-                Dim answerVal As Integer = If(chkApplicable.Checked, 1, 0)
+            ' Step 1: Get Subhazard ID and name from keyword
+            Dim cmd1 As New SqlCommand("
+            SELECT TOP 1 Subhazard_ID, Subhazard 
+            FROM threat_haz_rating_description 
+            WHERE LOWER(Subhazard) = @Name", conn)
+            cmd1.Parameters.AddWithValue("@Name", stepKey)
 
-                ' UPSERT logic: if exists, update; else insert
-                Dim sql As String = @"
+            Using reader = cmd1.ExecuteReader()
+                If reader.Read() Then
+                    subhazardId = Convert.ToInt32(reader("Subhazard_ID"))
+                    hfSubhazardID.Value = subhazardId
+                    litSubhazard.Text = reader("Subhazard").ToString()
+                Else
+                    Response.Redirect("AssessmentDashboard.aspx")
+                    Exit Sub
+                End If
+            End Using
+
+            ' Step 2: Load Level 4 Description
+            Dim cmd2 As New SqlCommand("
+            SELECT Description 
+            FROM threat_haz_rating_description 
+            WHERE Threat_Rating = 4 AND Subhazard_ID = @ID", conn)
+            cmd2.Parameters.AddWithValue("@ID", subhazardId)
+            Dim descResult = cmd2.ExecuteScalar()
+            If descResult IsNot Nothing Then
+                litExtraInfo.Text = $"<div class='mb-2 text-muted'><em>{descResult.ToString()}</em></div>"
+            End If
+
+            ' Step 3: Load existing answer if any
+            Dim selectedRating As String = ""
+            Dim cmd3 As New SqlCommand("
+            SELECT rating FROM Threat 
+            WHERE assessment_id = @AID AND subhazard_LU_id = @SID", conn)
+            cmd3.Parameters.AddWithValue("@AID", assessmentId)
+            cmd3.Parameters.AddWithValue("@SID", subhazardId)
+            Dim ratingObj = cmd3.ExecuteScalar()
+            If ratingObj IsNot Nothing Then
+                selectedRating = ratingObj.ToString()
+            End If
+
+            ' Step 4: Populate radio options
+            rblRatings.Items.Clear()
+
+            If stepKey.ToLower() = "terrorism" Then
+                rblRatings.Items.Add(New ListItem("MSA Threat Level 1 OR State/Territory Threat Level 1", "1"))
+                rblRatings.Items.Add(New ListItem("MSA Threat Level 2 OR State/Territory Threat Level 2", "2"))
+                rblRatings.Items.Add(New ListItem("MSA Threat Level 3 OR State/Territory Threat Level 3", "3"))
+                rblRatings.Items.Add(New ListItem("MSA Threat Level 4 OR State/Territory Threat Level N/A", "4"))
+
+            Else
+                Dim cmd4 As New SqlCommand("
+                SELECT Threat_Rating, Rating_Category 
+                FROM threat_haz_rating_lu 
+                ORDER BY Threat_Rating", conn)
+                Dim reader4 = cmd4.ExecuteReader()
+
+                While reader4.Read()
+                    Dim value = reader4("Threat_Rating").ToString()
+                    Dim label = reader4("Rating_Category").ToString()
+                    rblRatings.Items.Add(New ListItem(label, value))
+                End While
+            End If
+
+            ' Pre-select if value already stored
+            If Not String.IsNullOrEmpty(selectedRating) Then
+                Dim item = rblRatings.Items.FindByValue(selectedRating)
+                If item IsNot Nothing Then item.Selected = True
+            End If
+        End Using
+    End Sub
+
+
+    Protected Sub btnNext_Click(sender As Object, e As EventArgs)
+        If rblRatings.SelectedValue <> "" Then
+            Using conn As New SqlConnection(connString)
+                Dim cmd As New SqlCommand("
                     MERGE Threat AS target
-                    USING (SELECT @AssessmentID AS assessment_id, @SubhazardID AS subhazard_LU_id) AS source
+                    USING (SELECT @AID AS assessment_id, @SID AS subhazard_LU_id) AS source
                     ON target.assessment_id = source.assessment_id AND target.subhazard_LU_id = source.subhazard_LU_id
                     WHEN MATCHED THEN
-                        UPDATE SET rating = @Rating, Answer = @Answer
+                        UPDATE SET rating = @Rating, Answer = 1
                     WHEN NOT MATCHED THEN
                         INSERT (assessment_id, subhazard_LU_id, rating, Answer)
-                        VALUES (@AssessmentID, @SubhazardID, @Rating, @Answer);"
+                        VALUES (@AID, @SID, @Rating, 1);", conn)
 
-                Using cmd As New SqlCommand(sql, conn)
-                    cmd.Parameters.AddWithValue("@AssessmentID", assessmentID)
-                    cmd.Parameters.AddWithValue("@SubhazardID", subhazardID)
-                    cmd.Parameters.AddWithValue("@Rating", ratingVal)
-                    cmd.Parameters.AddWithValue("@Answer", answerVal)
-                    cmd.ExecuteNonQuery()
-                End Using
-            Next
-        End Using
+                cmd.Parameters.AddWithValue("@AID", hfAssessmentID.Value)
+                cmd.Parameters.AddWithValue("@SID", hfSubhazardID.Value)
+                cmd.Parameters.AddWithValue("@Rating", rblRatings.SelectedValue)
 
-        ' Redirect or show confirmation
-        Response.Redirect("AssessmentComplete.aspx")
-    End Sub
+                conn.Open()
+                cmd.ExecuteNonQuery()
+            End Using
 
-    Protected Sub btnCancel_Click(sender As Object, e As EventArgs)
-        Response.Redirect("Dashboard.aspx")
-    End Sub
-
-    Protected Sub gvHazards_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvHazards.RowDataBound
-        If e.Row.RowType = DataControlRowType.DataRow Then
-            gvHazards.DataKeyNames = New String() {"Subhazard_ID"}
+            ' Redirect to overview or next question
+            Response.Redirect("AssessmentOverview.aspx?id=" & hfAssessmentID.Value)
         End If
     End Sub
 End Class
