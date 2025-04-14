@@ -12,7 +12,7 @@ Public Class Login
     Protected Sub btnOktaLogin_Click(sender As Object, e As EventArgs)
         HttpContext.Current.GetOwinContext().Authentication.Challenge(
             New AuthenticationProperties() With {
-                .RedirectUri = "~/Default.aspx"
+                .RedirectUri = "/Default.aspx"
             }, "OpenIdConnect")
 
     End Sub

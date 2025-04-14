@@ -32,7 +32,7 @@ Partial Class Register
 
             Dim exists As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
             If exists > 0 Then
-                HttpContext.Current.Response.Redirect("~/Default.aspx")
+                HttpContext.Current.Response.Redirect("/Default.aspx")
             End If
 
             ' Insert new user

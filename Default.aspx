@@ -6,6 +6,7 @@
         <div class="row mb-4">
             <div class="col">
                 <h1 class="mt-4">ISAFIR Risk Assessment Dashboard</h1>
+                <h2>Welcome, <%= Context.User.Identity.Name %></h2>
                 <p class="lead">Welcome to the ISAFIR Risk Assessment Web Application. Use the dashboard below to view key metrics and navigate to main modules.</p>
             </div>
         </div>
