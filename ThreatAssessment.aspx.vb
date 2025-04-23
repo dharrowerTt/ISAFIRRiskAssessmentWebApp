@@ -17,9 +17,70 @@ Partial Class ThreatAssessment
 
             hfAssessmentID.Value = assessmentId
             LoadAssessmentDetails(Convert.ToInt32(assessmentId))
-            LoadThreatQuestion(stepKey.ToLower(), Convert.ToInt32(assessmentId))
+
+            If stepKey.ToLower() = "internalthreats" Then
+                mvThreatView.SetActiveView(ViewMatrix) ' <- set matrix view
+                LoadMatrixQuestions(Convert.ToInt32(assessmentId))
+            Else
+                mvThreatView.SetActiveView(ViewSingle) ' <- set single-question view
+                LoadSingleThreatQuestion(stepKey.ToLower(), Convert.ToInt32(assessmentId))
+            End If
         End If
     End Sub
+
+
+    Private Sub LoadSingleThreatQuestion(stepKey As String, assessmentId As Integer)
+        Using conn As New SqlConnection(connString)
+            conn.Open()
+
+            ' 1. Get question details
+            Dim cmd1 As New SqlCommand("
+            SELECT TOP 1 QuestionID, Heading, Content, GraphicURL 
+            FROM ThreatAssessmentQuestions
+            WHERE LOWER(StepKey) = @StepKey AND DisplayMode = 'Single'", conn)
+            cmd1.Parameters.AddWithValue("@StepKey", stepKey)
+
+            Dim reader = cmd1.ExecuteReader()
+            If Not reader.Read() Then
+                Response.Redirect("AssessmentDashboard.aspx")
+                Exit Sub
+            End If
+
+            Dim questionID = Convert.ToInt32(reader("QuestionID"))
+            hfSubhazardID.Value = questionID
+            litSubhazard.Text = reader("Heading").ToString()
+            litExtraInfo.Text = $"<div class='mb-2 text-muted'><em>{reader("Content")}</em></div>"
+
+            reader.Close()
+
+            ' 2. Load radio options
+            Dim selectedRating As String = ""
+            Dim cmd2 As New SqlCommand("
+            SELECT rating FROM Threat 
+            WHERE assessment_id = @AID AND subhazard_LU_id = @QID", conn)
+            cmd2.Parameters.AddWithValue("@AID", assessmentId)
+            cmd2.Parameters.AddWithValue("@QID", questionID)
+            selectedRating = Convert.ToString(cmd2.ExecuteScalar())
+
+            Dim cmd3 As New SqlCommand("
+            SELECT DisplayText, Value FROM ThreatAssessmentOptions 
+            WHERE QuestionID = @QID ORDER BY SortOrder", conn)
+            cmd3.Parameters.AddWithValue("@QID", questionID)
+
+            reader = cmd3.ExecuteReader()
+            rblRatings.Items.Clear()
+            While reader.Read()
+                rblRatings.Items.Add(New ListItem(reader("DisplayText").ToString(), reader("Value").ToString()))
+            End While
+
+            If Not String.IsNullOrEmpty(selectedRating) Then
+                Dim item = rblRatings.Items.FindByValue(selectedRating)
+                If item IsNot Nothing Then item.Selected = True
+            End If
+        End Using
+    End Sub
+
+
 
     Private Sub LoadAssessmentDetails(assessmentId As Integer)
         Using conn As New SqlConnection(connString)
@@ -43,81 +104,53 @@ Partial Class ThreatAssessment
         End Using
     End Sub
 
-    Private Sub LoadThreatQuestion(stepKey As String, assessmentId As Integer)
-        Dim subhazardId As Integer = -1
-
+    Private Sub LoadMatrixQuestions(assessmentId As Integer)
         Using conn As New SqlConnection(connString)
+            Dim dt As New DataTable()
+            dt.Columns.Add("QuestionID", GetType(Integer))
+            dt.Columns.Add("Heading", GetType(String))
+            dt.Columns.Add("Content", GetType(String))
+            dt.Columns.Add("HelpText", GetType(String))
+            dt.Columns.Add("SelectedValue", GetType(String))
+
             conn.Open()
 
-            ' Step 1: Get Subhazard ID and name from keyword
-            Dim cmd1 As New SqlCommand("
-            SELECT TOP 1 Subhazard_ID, Subhazard 
-            FROM threat_haz_rating_description 
-            WHERE LOWER(Subhazard) = @Name", conn)
-            cmd1.Parameters.AddWithValue("@Name", stepKey)
+            ' Load all matrix-style questions
+            Dim cmd As New SqlCommand("
+            SELECT q.QuestionID, q.Heading, q.Content, q.HelpTooltip
+            FROM ThreatAssessmentQuestions q
+            WHERE q.DisplayMode = 'Matrix'
+            ORDER BY q.QuestionID", conn)
 
-            Using reader = cmd1.ExecuteReader()
-                If reader.Read() Then
-                    subhazardId = Convert.ToInt32(reader("Subhazard_ID"))
-                    hfSubhazardID.Value = subhazardId
-                    litSubhazard.Text = reader("Subhazard").ToString()
-                Else
-                    Response.Redirect("AssessmentDashboard.aspx")
-                    Exit Sub
+            Dim reader = cmd.ExecuteReader()
+            While reader.Read()
+                Dim row = dt.NewRow()
+                row("QuestionID") = reader("QuestionID")
+                row("Heading") = reader("Heading").ToString()
+                row("Content") = reader("Content").ToString()
+                row("HelpText") = reader("HelpTooltip").ToString()
+                row("SelectedValue") = "" ' default
+                dt.Rows.Add(row)
+            End While
+            reader.Close()
+
+            ' Load saved answers
+            For Each row As DataRow In dt.Rows
+                Dim cmd2 As New SqlCommand("
+                SELECT rating FROM Threat 
+                WHERE assessment_id = @AID AND subhazard_LU_id = @QID", conn)
+                cmd2.Parameters.AddWithValue("@AID", assessmentId)
+                cmd2.Parameters.AddWithValue("@QID", row("QuestionID"))
+
+                Dim saved = cmd2.ExecuteScalar()
+                If saved IsNot Nothing Then
+                    row("SelectedValue") = saved.ToString()
                 End If
-            End Using
+            Next
 
-            ' Step 2: Load Level 4 Description
-            Dim cmd2 As New SqlCommand("
-            SELECT Description 
-            FROM threat_haz_rating_description 
-            WHERE Threat_Rating = 4 AND Subhazard_ID = @ID", conn)
-            cmd2.Parameters.AddWithValue("@ID", subhazardId)
-            Dim descResult = cmd2.ExecuteScalar()
-            If descResult IsNot Nothing Then
-                litExtraInfo.Text = $"<div class='mb-2 text-muted'><em>{descResult.ToString()}</em></div>"
-            End If
-
-            ' Step 3: Load existing answer if any
-            Dim selectedRating As String = ""
-            Dim cmd3 As New SqlCommand("
-            SELECT rating FROM Threat 
-            WHERE assessment_id = @AID AND subhazard_LU_id = @SID", conn)
-            cmd3.Parameters.AddWithValue("@AID", assessmentId)
-            cmd3.Parameters.AddWithValue("@SID", subhazardId)
-            Dim ratingObj = cmd3.ExecuteScalar()
-            If ratingObj IsNot Nothing Then
-                selectedRating = ratingObj.ToString()
-            End If
-
-            ' Step 4: Populate radio options
-            rblRatings.Items.Clear()
-
-            If stepKey.ToLower() = "terrorism" Then
-                rblRatings.Items.Add(New ListItem("MSA Threat Level 1 OR State/Territory Threat Level 1", "1"))
-                rblRatings.Items.Add(New ListItem("MSA Threat Level 2 OR State/Territory Threat Level 2", "2"))
-                rblRatings.Items.Add(New ListItem("MSA Threat Level 3 OR State/Territory Threat Level 3", "3"))
-                rblRatings.Items.Add(New ListItem("MSA Threat Level 4 OR State/Territory Threat Level N/A", "4"))
-
-            Else
-                Dim cmd4 As New SqlCommand("
-                SELECT Threat_Rating, Rating_Category 
-                FROM threat_haz_rating_lu 
-                ORDER BY Threat_Rating", conn)
-                Dim reader4 = cmd4.ExecuteReader()
-
-                While reader4.Read()
-                    Dim value = reader4("Threat_Rating").ToString()
-                    Dim label = reader4("Rating_Category").ToString()
-                    rblRatings.Items.Add(New ListItem(label, value))
-                End While
-            End If
-
-            ' Pre-select if value already stored
-            If Not String.IsNullOrEmpty(selectedRating) Then
-                Dim item = rblRatings.Items.FindByValue(selectedRating)
-                If item IsNot Nothing Then item.Selected = True
-            End If
+            ' Bind to Repeater (you’ll set this up in .aspx)
+            rptMatrix.DataSource = dt
+            rptMatrix.DataBind()
         End Using
     End Sub
 
@@ -126,25 +159,122 @@ Partial Class ThreatAssessment
         If rblRatings.SelectedValue <> "" Then
             Using conn As New SqlConnection(connString)
                 Dim cmd As New SqlCommand("
-                    MERGE Threat AS target
-                    USING (SELECT @AID AS assessment_id, @SID AS subhazard_LU_id) AS source
-                    ON target.assessment_id = source.assessment_id AND target.subhazard_LU_id = source.subhazard_LU_id
-                    WHEN MATCHED THEN
-                        UPDATE SET rating = @Rating, Answer = 1
-                    WHEN NOT MATCHED THEN
-                        INSERT (assessment_id, subhazard_LU_id, rating, Answer)
-                        VALUES (@AID, @SID, @Rating, 1);", conn)
+                MERGE Threat AS target
+                USING (SELECT @AID AS assessment_id, @SID AS subhazard_LU_id) AS source
+                ON target.assessment_id = source.assessment_id AND target.subhazard_LU_id = source.subhazard_LU_id
+                WHEN MATCHED THEN
+                    UPDATE SET rating = @Rating, Answer = 1
+                WHEN NOT MATCHED THEN
+                    INSERT (assessment_id, subhazard_LU_id, rating, Answer)
+                    VALUES (@AID, @SID, @Rating, 1);", conn)
 
-                cmd.Parameters.AddWithValue("@AID", hfAssessmentID.Value)
-                cmd.Parameters.AddWithValue("@SID", hfSubhazardID.Value)
+                cmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+                cmd.Parameters.AddWithValue("@SID", Convert.ToInt32(hfSubhazardID.Value))
                 cmd.Parameters.AddWithValue("@Rating", rblRatings.SelectedValue)
+
+
 
                 conn.Open()
                 cmd.ExecuteNonQuery()
             End Using
 
-            ' Redirect to overview or next question
-            Response.Redirect("AssessmentOverview.aspx?id=" & hfAssessmentID.Value)
+            ' Determine the next step
+            Dim currentStep As String = Request.QueryString("step")?.ToLower()
+            Dim nextStep As String = GetNextStep(currentStep)
+
+            If nextStep = "internalthreats" Then
+                Response.Redirect($"ThreatAssessment.aspx?assessment_id={hfAssessmentID.Value}&step=internalthreats")
+            ElseIf nextStep IsNot Nothing Then
+                Response.Redirect($"ThreatAssessment.aspx?assessment_id={hfAssessmentID.Value}&step={nextStep}")
+            Else
+                Response.Redirect("AssessmentOverview.aspx?id=" & hfAssessmentID.Value)
+            End If
         End If
     End Sub
+
+    Private Function GetNextStep(currentStep As String) As String
+        ' Define ordered steps
+        Dim steps As New List(Of String) From {
+        "terrorism", "earthquake", "flood", "wildfire", "cyberattack", "infrastructure"  ' Example only — match your actual keys
+    }
+
+        Dim index = steps.IndexOf(currentStep)
+        If index >= 0 AndAlso index + 1 < steps.Count Then
+            Return steps(index + 1)
+        ElseIf index = steps.Count - 1 Then
+            Return "internalthreats"
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Protected Sub btnMatrixSubmit_Click(sender As Object, e As EventArgs)
+        Dim assessmentId As Integer = Convert.ToInt32(hfAssessmentID.Value)
+
+        Using conn As New SqlConnection(connString)
+            conn.Open()
+
+            For Each item As RepeaterItem In rptMatrix.Items
+                Dim hfQuestionID As HiddenField = TryCast(item.FindControl("hfQuestionID"), HiddenField)
+                Dim rblOptions As RadioButtonList = TryCast(item.FindControl("rblMatrixOptions"), RadioButtonList)
+
+                If hfQuestionID IsNot Nothing AndAlso rblOptions IsNot Nothing AndAlso Not String.IsNullOrEmpty(rblOptions.SelectedValue) Then
+                    Dim cmd As New SqlCommand("
+                    MERGE Threat AS target
+                    USING (SELECT @AID AS assessment_id, @QID AS subhazard_LU_id) AS source
+                    ON target.assessment_id = source.assessment_id AND target.subhazard_LU_id = source.subhazard_LU_id
+                    WHEN MATCHED THEN
+                        UPDATE SET rating = @Rating, Answer = 1
+                    WHEN NOT MATCHED THEN
+                        INSERT (assessment_id, subhazard_LU_id, rating, Answer)
+                        VALUES (@AID, @QID, @Rating, 1);", conn)
+
+                    cmd.Parameters.AddWithValue("@AID", assessmentId)
+                    cmd.Parameters.AddWithValue("@QID", Convert.ToInt32(hfQuestionID.Value))
+                    cmd.Parameters.AddWithValue("@Rating", rblOptions.SelectedValue)
+
+                    cmd.ExecuteNonQuery()
+                End If
+            Next
+        End Using
+
+        ' Redirect to the assessment overview or next logical page
+        Response.Redirect("AssessmentOverview.aspx?id=" & assessmentId)
+    End Sub
+
+    Protected Sub rptMatrix_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rptMatrix.ItemDataBound
+        If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
+            Dim hfQuestionID As HiddenField = TryCast(e.Item.FindControl("hfQuestionID"), HiddenField)
+            Dim rbl As RadioButtonList = TryCast(e.Item.FindControl("rblMatrixOptions"), RadioButtonList)
+
+            If hfQuestionID IsNot Nothing AndAlso rbl IsNot Nothing Then
+                Dim qid As Integer = Convert.ToInt32(hfQuestionID.Value)
+
+                Using conn As New SqlConnection(connString)
+                    conn.Open()
+
+                    Dim cmd As New SqlCommand("
+                    SELECT DisplayText, Value 
+                    FROM ThreatAssessmentOptions 
+                    WHERE QuestionID = @QID 
+                    ORDER BY SortOrder", conn)
+                    cmd.Parameters.AddWithValue("@QID", qid)
+
+                    Dim reader = cmd.ExecuteReader()
+                    While reader.Read()
+                        rbl.Items.Add(New ListItem(reader("DisplayText").ToString(), reader("Value").ToString()))
+                    End While
+                End Using
+
+                ' Select saved value if it exists
+                Dim selectedValue As String = DataBinder.Eval(e.Item.DataItem, "SelectedValue").ToString()
+                If Not String.IsNullOrEmpty(selectedValue) Then
+                    Dim selectedItem = rbl.Items.FindByValue(selectedValue)
+                    If selectedItem IsNot Nothing Then selectedItem.Selected = True
+                End If
+            End If
+        End If
+    End Sub
+
+
 End Class

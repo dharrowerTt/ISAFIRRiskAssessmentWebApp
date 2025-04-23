@@ -59,6 +59,24 @@ Partial Public Class ThreatAssessment
     Protected WithEvents litStartDate As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
+    '''mvThreatView control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents mvThreatView As Global.System.Web.UI.WebControls.MultiView
+
+    '''<summary>
+    '''ViewSingle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ViewSingle As Global.System.Web.UI.WebControls.View
+
+    '''<summary>
     '''litSubhazard control.
     '''</summary>
     '''<remarks>
@@ -93,6 +111,33 @@ Partial Public Class ThreatAssessment
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnNext As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''ViewMatrix control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ViewMatrix As Global.System.Web.UI.WebControls.View
+
+    '''<summary>
+    '''rptMatrix control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rptMatrix As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''btnMatrixSubmit control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnMatrixSubmit As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''hfAssessmentID control.
