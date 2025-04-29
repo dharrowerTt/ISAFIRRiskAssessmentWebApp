@@ -65,3 +65,20 @@
 <p>
   Deployment is handled via secured, internal pipelines. Reach out to the project admin for access to staging or production environments.
 </p>
+<h2>Recent Updates</h2>
+<ul>
+  <li>Added dynamic Threat Assessment matrix with improved UI/UX (Bootstrap 4-compatible).</li>
+  <li>Introduced internal threat matrix view with accessibility enhancements (screenreader-compatible tooltips).</li>
+  <li>Created Consequence Assessment module framework for dynamic threat × impact consequence rating.</li>
+  <li>Refactored legacy markup for Bootstrap 4 compatibility (removed Bootstrap 5 dependencies).</li>
+  <li>Improved SQL-driven loading of Threat Assessment and Consequence Assessment data.</li>
+  <li>Resolved long-standing jQuery duplication issues and streamlined client-side scripting.</li>
+</ul>
+<h2>Upcoming Development</h2>
+<ul>
+  <li>Complete Consequence Assessment save and load functionality.</li>
+  <li>Implement full guidance text for all Impact areas.</li>
+  <li>Polish data validation, accessibility, and error handling for matrix inputs.</li>
+  <li>Continue interface modernization and prep for full security review before go-live.</li>
+</ul>
+
