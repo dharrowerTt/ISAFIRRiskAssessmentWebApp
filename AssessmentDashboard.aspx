@@ -13,20 +13,21 @@
             If Not IsPostBack Then
                 Dim status As String = Request.QueryString("status")
                 If status = "completed" Then
-                    Dim toastScript As String = "
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Assessment marked complete',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            background: '#EEEEEE',
-                            color: '#3B1E54',
-                            iconColor: '#3B1E54'
-                        });"
+                    Dim toastScript As String = "Swal.fire({" & vbCrLf &
+"  toast: true," & vbCrLf &
+"  position: 'top-end'," & vbCrLf &
+"  icon: 'success'," & vbCrLf &
+"  title: 'Assessment marked complete'," & vbCrLf &
+"  showConfirmButton: false," & vbCrLf &
+"  timer: 3000," & vbCrLf &
+"  timerProgressBar: true," & vbCrLf &
+"  background: '#EEEEEE'," & vbCrLf &
+"  color: '#3B1E54'," & vbCrLf &
+"  iconColor: '#3B1E54'" & vbCrLf &
+"});"
+
                     Page.ClientScript.RegisterStartupScript(Me.GetType(), "showToast", toastScript, True)
+
                 End If
             End If
         End Sub

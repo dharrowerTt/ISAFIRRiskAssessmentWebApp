@@ -46,45 +46,62 @@
         <asp:View ID="ViewMatrix" runat="server">
             <h4 class="bg-warning p-2">Internal Threat Matrix</h4>
 
-            <asp:Repeater ID="rptMatrix" runat="server" OnItemDataBound="rptMatrix_ItemDataBound">
+<asp:Repeater ID="rptMatrix" runat="server" OnItemDataBound="rptMatrix_ItemDataBound">
+    <HeaderTemplate>
+        <table class="table table-bordered align-middle text-center">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle text-start">Threat</th>
+                    <th colspan="5">Rating</th>
+                </tr>
+                <tr>
+                    <th>Rare<br /><small>(>20 years)</small></th>
+                    <th>Every<br /> 20 yrs</th>
+                    <th>Every<br /> 5 yrs</th>
+                    <th>Yearly</th>
+                    <th>N/A</th>
+                </tr>
+            </thead>
+            <tbody>
+    </HeaderTemplate>
 
-                <HeaderTemplate>
-                    <table class="table table-bordered align-middle">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%;">Threat</th>
-                                <th style="width: 50%;">Description</th>
-                                <th style="width: 20%;">Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                </HeaderTemplate>
+<ItemTemplate>
+<tr>
+<td class="text-start">
+    <%# Eval("Heading") %>
+    <%# If(
+        Not String.IsNullOrEmpty(Eval("HelpText").ToString()),
+        "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='ms-2 text-primary' role='button' tabindex='0' data-toggle='tooltip' data-placement='right' title='" & Eval("HelpText") & "'>" &
+        "<path d='M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z'/>" &
+        "<path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.003-.252 1.25-.598l.088-.416c-.287.346-.52.527-.836.527-.275 0-.375-.193-.303-.54l.738-3.468c.194-.897-.105-1.319-.808-1.319z'/>" &
+        "<circle cx='8' cy='4.5' r='1'/>" &
+        "</svg>",
+        ""
+    ) %>
+</td>
 
-                <ItemTemplate>
-                    <tr>
-                        <td>
-                            <%# Eval("Heading") %>
-                            <asp:HiddenField ID="hfQuestionID" runat="server" Value='<%# Eval("QuestionID") %>' />
-                        </td>
-                        <td>
-                            <%# Eval("Content") %>
-                            <% If Not String.IsNullOrEmpty(Eval("HelpText")) Then %>
-                                <button type="button" class="btn btn-sm btn-outline-info ms-2" title='<%# Eval("HelpText") %>'>
-                                    ?
-                                </button>
-                            <% End If %>
-                        </td>
-                        <td>
-                            <asp:RadioButtonList ID="rblMatrixOptions" runat="server" RepeatDirection="Horizontal" RepeatLayout="Flow" />
-                        </td>
-                    </tr>
-                </ItemTemplate>
 
-                <FooterTemplate>
-                        </tbody>
-                    </table>
-                </FooterTemplate>
-            </asp:Repeater>
+
+
+
+
+    <td class="text-center"><asp:RadioButton ID="rbRare" GroupName='<%# Eval("QuestionID") %>' runat="server" Value="Rare" /></td>
+    <td class="text-center"><asp:RadioButton ID="rbEvery20" GroupName='<%# Eval("QuestionID") %>' runat="server" Value="Every20" /></td>
+    <td class="text-center"><asp:RadioButton ID="rbEvery5" GroupName='<%# Eval("QuestionID") %>' runat="server" Value="Every5" /></td>
+    <td class="text-center"><asp:RadioButton ID="rbYearly" GroupName='<%# Eval("QuestionID") %>' runat="server" Value="Yearly" /></td>
+    <td class="text-center"><asp:RadioButton ID="rbNA" GroupName='<%# Eval("QuestionID") %>' runat="server" Value="NA" /></td>
+</tr>
+</ItemTemplate>
+
+
+
+
+    <FooterTemplate>
+            </tbody>
+        </table>
+    </FooterTemplate>
+</asp:Repeater>
+
 
             <div class="mt-4 text-end">
                 <asp:Button ID="btnMatrixSubmit" runat="server" Text="Submit All" CssClass="btn btn-primary" OnClick="btnMatrixSubmit_Click" />
@@ -95,6 +112,14 @@
     <!-- Hidden Fields -->
     <asp:HiddenField ID="hfAssessmentID" runat="server" />
     <asp:HiddenField ID="hfSubhazardID" runat="server" />
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+
 </div>
 
 </asp:Content>

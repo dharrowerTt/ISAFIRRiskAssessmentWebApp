@@ -238,6 +238,7 @@
     <Content Include="AssessmentOverview.aspx" />
     <Content Include="AssessmentStart.aspx" />
     <Content Include="AssessmentView.aspx" />
+    <Content Include="ConsequenceAssessment.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -390,6 +391,13 @@
     </Compile>
     <Compile Include="AssessmentView.aspx.vb">
       <DependentUpon>AssessmentView.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ConsequenceAssessment.aspx.designer.vb">
+      <DependentUpon>ConsequenceAssessment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ConsequenceAssessment.aspx.vb">
+      <DependentUpon>ConsequenceAssessment.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Contact.aspx.designer.vb">
