@@ -3,6 +3,8 @@ Imports System.Configuration
 
 Partial Class ConsequenceAssessment
     Inherits System.Web.UI.Page
+    Private demoMode As Boolean = False
+    Private ImpactCategories As New List(Of (Name As String, HelpText As String))
 
     Private ReadOnly connString As String = ConfigurationManager.ConnectionStrings("MembershipDB").ConnectionString
 
@@ -10,13 +12,25 @@ Partial Class ConsequenceAssessment
         If Not IsPostBack Then
             Dim assessmentId As String = Request.QueryString("assessment_id")
             If String.IsNullOrEmpty(assessmentId) Then
-                Response.Redirect("AssessmentDashboard.aspx")
+                demoMode = True
+                hfAssessmentID.Value = "0"
+                LoadDemoAssessmentDetails()
+            Else
+                hfAssessmentID.Value = assessmentId
+                LoadAssessmentDetails(Convert.ToInt32(assessmentId))
             End If
-
-            hfAssessmentID.Value = assessmentId
-            LoadAssessmentDetails(Convert.ToInt32(assessmentId))
+            LoadImpactCategories()
             LoadConsequenceMatrix()
+
         End If
+    End Sub
+
+    Private Sub LoadDemoAssessmentDetails()
+        litAssessmentID.Text = "DEMO123"
+        litFacility.Text = "Sample Facility"
+        litAssessor.Text = "Jane Doe"
+        litContact.Text = "jane.doe@example.com / 555-1234"
+        litStartDate.Text = "2025-04-01"
     End Sub
 
     Private Sub LoadAssessmentDetails(assessmentId As Integer)
@@ -32,10 +46,11 @@ Partial Class ConsequenceAssessment
 
             conn.Open()
             Dim cmd As New SqlCommand("
-                SELECT ID, subhazard AS ThreatName 
-                FROM Subhazard 
-                WHERE Int_Ext = 'Int' OR Int_Ext = 'Ext'
-                ORDER BY ID", conn)
+    SELECT ID, Subhazard AS ThreatName 
+    FROM dbo.Subhazard_LU 
+    WHERE Int_Ext = 'Int' OR Int_Ext = 'Ext'
+    ORDER BY ID", conn)
+
 
             Dim reader = cmd.ExecuteReader()
             While reader.Read()
@@ -51,22 +66,104 @@ Partial Class ConsequenceAssessment
     End Sub
 
     Protected Sub btnSubmitConsequence_Click(sender As Object, e As EventArgs)
-        ' (Save all the inputs from the matrix into Consequence table)
+        If demoMode Then
+            ' Display a warning and skip DB logic
+            ClientScript.RegisterStartupScript(Me.GetType(), "alert", "alert('Demo mode: Data not saved.');", True)
+            Return
+        End If
+
+        ' Actual DB save logic goes here...
     End Sub
 
+
     Public Function GetImpactHeaders() As String
-        ' Output the 9 header cells, each with impact name + tooltip
-        ' (return literal HTML string)
+        Dim sb As New StringBuilder()
+
+        For Each impact In ImpactCategories
+            sb.AppendFormat("<th>{0}</th>", impact.Name)
+
+        Next
+
+        Return sb.ToString()
     End Function
+
 
     Public Function GetBulkInputs() As String
-        ' Output the 9 bulk input <input> fields
-        ' (return literal HTML string)
+        Dim sb As New StringBuilder()
+        For i As Integer = 1 To ImpactCategories.Count
+            sb.Append("<th><input type='number' class='form-control form-control-sm bulk-input consequence-input text-center' min='0' max='3' maxlength='1' /></th>")
+        Next
+        Return sb.ToString()
     End Function
 
+
+
     Public Function GetConsequenceInputs(dataItem As Object) As String
-        ' Output 9 textboxes for each row
-        ' (return literal HTML string)
+        Dim threatId As Integer = DataBinder.Eval(dataItem, "ThreatID")
+        Dim sb As New StringBuilder()
+
+        For i As Integer = 1 To ImpactCategories.Count
+            sb.AppendFormat(
+            "<td><input type='number' name='c_{0}_{1}' class='form-control form-control-sm consequence-input text-center' min='0' max='3' maxlength='1' /></td>",
+            threatId, i)
+        Next
+
+        Return sb.ToString()
     End Function
+    Public ReadOnly Property ImpactCount As Integer
+        Get
+            Return ImpactCategories.Count
+        End Get
+    End Property
+
+
+
+    Private Sub LoadImpactCategories()
+        Using conn As New SqlConnection(connString)
+            conn.Open()
+            Dim cmd As New SqlCommand("
+            SELECT ImpactName, HelpText 
+            FROM dbo.ConsequenceImpact_LU 
+            ORDER BY ImpactID", conn)
+
+            Dim reader = cmd.ExecuteReader()
+            While reader.Read()
+                ImpactCategories.Add((reader("ImpactName").ToString(), reader("HelpText").ToString()))
+            End While
+        End Using
+    End Sub
+
+    Public Function GetHelperButtons() As String
+        Dim sb As New StringBuilder()
+        For i As Integer = 1 To ImpactCategories.Count
+            Dim helpText = ImpactCategories(i - 1).HelpText.Replace("'", "\'")
+            sb.AppendFormat(
+            "<th class='text-center'><button type='button' class='btn btn-sm btn-outline-secondary' onclick='showHelp({0})'>?</button></th>",
+            i)
+        Next
+        Return sb.ToString()
+    End Function
+
+    Public ReadOnly Property HelpTextJSArray As String
+        Get
+            If ImpactCategories.Count = 0 Then
+                Return "[]"
+            End If
+
+            Dim sb As New StringBuilder()
+            sb.Append("[")
+
+            For i As Integer = 0 To ImpactCategories.Count - 1
+                Dim helpText = ImpactCategories(i).HelpText.Replace("""", "\""").Replace(vbCrLf, "").Replace(Environment.NewLine, "")
+                sb.Append("""" & helpText & """")
+                If i < ImpactCategories.Count - 1 Then sb.Append(",")
+            Next
+
+            sb.Append("]")
+            Return sb.ToString()
+        End Get
+    End Property
+
+
 
 End Class
