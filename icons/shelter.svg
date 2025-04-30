@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 73 73">
+  <!-- Generator: Adobe Illustrator 29.4.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 152)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #5a6368;
+      }
+
+      .st0, .st1, .st2, .st3, .st4 {
+        fill-rule: evenodd;
+      }
+
+      .st5 {
+        fill: #7aa9d3;
+      }
+
+      .st1, .st6 {
+        fill: #fefefe;
+      }
+
+      .st7 {
+        fill: #9e7800;
+      }
+
+      .st8 {
+        fill: none;
+        stroke: #5cb0e2;
+        stroke-miterlimit: 10;
+      }
+
+      .st2 {
+        fill: #40484c;
+      }
+
+      .st3 {
+        fill: #8e9b0d;
+      }
+
+      .st4 {
+        fill: #d8a400;
+      }
+    </style>
+  </defs>
+  <g>
+    <polygon class="st4" points="11.4 27.9 36.8 16.5 61.6 27.9 61.6 55.6 11.4 55.6 11.4 27.9"/>
+    <polygon class="st3" points="36.5 14.8 7.5 28 7.5 31.1 36.5 17.9 65.5 31.1 65.5 28 36.5 14.8"/>
+    <rect class="st6" x="14" y="31.4" width="9.4" height="9.4"/>
+    <rect class="st5" x="15" y="32.4" width="7.3" height="7.3"/>
+    <polygon class="st1" points="18.1 31.5 19.1 31.5 19.1 35.5 23.1 35.5 23.1 36.5 19.1 36.5 19.1 40.6 18.1 40.6 18.1 36.5 14.1 36.5 14.1 35.5 18.1 35.5 18.1 31.5"/>
+    <path class="st1" d="M25.9,31.4h9.4v9.4h-9.4v-9.4h0Z"/>
+    <path class="st1" d="M37.9,31.4h9.4v9.4h-9.4v-9.4h0Z"/>
+    <rect class="st6" x="49.8" y="31.4" width="9.4" height="9.4"/>
+    <rect class="st5" x="50.8" y="32.4" width="7.3" height="7.3"/>
+    <polygon class="st1" points="54 31.5 55 31.5 55 35.5 59 35.5 59 36.5 55 36.5 55 40.6 54 40.6 54 36.5 50 36.5 50 35.5 54 35.5 54 31.5"/>
+    <rect class="st5" x="26.9" y="32.4" width="7.3" height="7.3"/>
+    <rect class="st5" x="38.9" y="32.4" width="7.3" height="7.3"/>
+    <polygon class="st1" points="30.1 31.5 31.1 31.5 31.1 35.5 35.1 35.5 35.1 36.5 31.1 36.5 31.1 40.6 30.1 40.6 30.1 36.5 26.1 36.5 26.1 35.5 30.1 35.5 30.1 31.5"/>
+    <polygon class="st1" points="42 31.5 43 31.5 43 35.5 47 35.5 47 36.5 43 36.5 43 40.6 42 40.6 42 36.5 38 36.5 38 35.5 42 35.5 42 31.5"/>
+    <rect class="st6" x="14" y="42.2" width="9.4" height="9.4"/>
+    <rect class="st5" x="15" y="43.2" width="7.3" height="7.3"/>
+    <polygon class="st1" points="18.1 42.3 19.1 42.3 19.1 46.3 23.1 46.3 23.1 47.3 19.1 47.3 19.1 51.3 18.1 51.3 18.1 47.3 14.1 47.3 14.1 46.3 18.1 46.3 18.1 42.3"/>
+    <rect class="st6" x="49.8" y="42.2" width="9.4" height="9.4"/>
+    <rect class="st5" x="50.8" y="43.2" width="7.3" height="7.3"/>
+    <polygon class="st1" points="54 42.3 55 42.3 55 46.3 59 46.3 59 47.3 55 47.3 55 51.3 54 51.3 54 47.3 50 47.3 50 46.3 54 46.3 54 42.3"/>
+    <rect class="st6" x="28.8" y="42.3" width="15.8" height="13.3"/>
+    <path class="st0" d="M29.8,43.3h6.4v11.2h-6.4v-11.2ZM37.2,43.3h6.4v11.2h-6.4v-11.2Z"/>
+    <path class="st2" d="M34.3,48.2c.4,0,.7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7h0ZM39,48.2c.4,0,.7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7h0Z"/>
+    <rect class="st7" x="10.1" y="55.6" width="52.7" height="2.6"/>
+  </g>
+  <rect class="st8" x=".5" y=".5" width="72" height="72"/>
+</svg>

@@ -268,6 +268,7 @@
     <Content Include="Help.aspx" />
     <Content Include="images\avatar.svg" />
     <Content Include="images\terror.jpg" />
+    <Content Include="LifelineAssessment.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="OktaLogin.aspx" />
     <Content Include="Register.aspx" />
@@ -331,6 +332,8 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="VulnerabilityAssessmentIntro.aspx" />
+    <Content Include="VulnerabilitySection.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -460,6 +463,13 @@
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Helpers.vb" />
+    <Compile Include="LifelineAssessment.aspx.designer.vb">
+      <DependentUpon>LifelineAssessment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LifelineAssessment.aspx.vb">
+      <DependentUpon>LifelineAssessment.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Login.aspx.designer.vb">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
@@ -558,6 +568,20 @@
     <Compile Include="Site.Mobile.Master.designer.vb">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="VulnerabilityAssessmentIntro.aspx.designer.vb">
+      <DependentUpon>VulnerabilityAssessmentIntro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VulnerabilityAssessmentIntro.aspx.vb">
+      <DependentUpon>VulnerabilityAssessmentIntro.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VulnerabilitySection.aspx.designer.vb">
+      <DependentUpon>VulnerabilitySection.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VulnerabilitySection.aspx.vb">
+      <DependentUpon>VulnerabilitySection.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -592,6 +616,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="icons\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
