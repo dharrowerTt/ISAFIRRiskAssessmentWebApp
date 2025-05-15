@@ -50,6 +50,24 @@ Partial Public Class UserRoleEdit
     Protected WithEvents ddlRole As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
+    '''txtState control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtState As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtFacility control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtFacility As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''btnSave control.
     '''</summary>
     '''<remarks>

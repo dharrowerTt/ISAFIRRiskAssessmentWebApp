@@ -15,22 +15,51 @@ Partial Public Class RoleFunctionManagement
             LoadRoles()
         End If
 
-        If ddlRoles.Items.Count > 0 Then
+        If ddlRoles.SelectedIndex > -1 AndAlso ddlRoles.SelectedValue <> "" Then
             LoadPermissionsForRole(ddlRoles.SelectedValue)
         End If
-
     End Sub
 
     Private Sub LoadRoles()
         ddlRoles.Items.Clear()
 
-        Dim roles As List(Of String) = System.Web.Security.Roles.GetAllRoles().ToList()
-        ddlRoles.DataSource = roles
-        ddlRoles.DataBind()
+        Dim query As String = "SELECT RoleName, DisplayName, Scope, Description FROM Role_LU ORDER BY Scope, DisplayName"
+
+        Using conn As New SqlConnection(connStr)
+            Using cmd As New SqlCommand(query, conn)
+                conn.Open()
+                Using reader = cmd.ExecuteReader()
+                    Dim currentScope As String = ""
+
+                    While reader.Read()
+                        Dim scope = reader("Scope").ToString()
+                        Dim roleName = reader("RoleName").ToString()
+                        Dim displayName = reader("DisplayName").ToString()
+                        Dim description = reader("Description").ToString()
+
+                        ' Add section header
+                        If scope <> currentScope Then
+                            Dim headerItem As New ListItem($"--- {scope.ToUpper()} ROLES ---", "")
+                            headerItem.Attributes.Add("disabled", "true")
+                            headerItem.Attributes.Add("style", "font-weight:bold; color:#999;")
+                            ddlRoles.Items.Add(headerItem)
+                            currentScope = scope
+                        End If
+
+                        ' Add role option
+                        Dim item As New ListItem(displayName, roleName)
+                        item.Attributes.Add("title", description) ' optional tooltip
+                        ddlRoles.Items.Add(item)
+                    End While
+                End Using
+            End Using
+        End Using
     End Sub
 
     Protected Sub ddlRoles_SelectedIndexChanged(sender As Object, e As EventArgs)
-        LoadPermissionsForRole(ddlRoles.SelectedValue)
+        If ddlRoles.SelectedValue <> "" Then
+            LoadPermissionsForRole(ddlRoles.SelectedValue)
+        End If
     End Sub
 
     Private Sub LoadPermissionsForRole(roleName As String)
@@ -57,6 +86,7 @@ Partial Public Class RoleFunctionManagement
 
     Protected Sub btnSave_Click(sender As Object, e As EventArgs)
         Dim roleName As String = ddlRoles.SelectedValue
+        If String.IsNullOrEmpty(roleName) Then Exit Sub
 
         Using conn As New SqlConnection(connStr)
             conn.Open()
@@ -65,18 +95,21 @@ Partial Public Class RoleFunctionManagement
                 Dim permissionName As String = row.Cells(0).Text
                 Dim chkAllowed As CheckBox = CType(row.FindControl("chkAllowed"), CheckBox)
 
-                ' Get PermissionId
                 Dim permissionId As Integer = GetPermissionIdByName(permissionName, conn)
 
                 ' Delete existing mapping
-                Dim deleteCmd As New SqlCommand("DELETE FROM RolePermissionMap WHERE RoleName = @RoleName AND PermissionId = @PermissionId", conn)
+                Dim deleteCmd As New SqlCommand("
+                    DELETE FROM RolePermissionMap 
+                    WHERE RoleName = @RoleName AND PermissionId = @PermissionId", conn)
                 deleteCmd.Parameters.AddWithValue("@RoleName", roleName)
                 deleteCmd.Parameters.AddWithValue("@PermissionId", permissionId)
                 deleteCmd.ExecuteNonQuery()
 
-                ' Insert new mapping if allowed
+                ' Insert new mapping if checked
                 If chkAllowed.Checked Then
-                    Dim insertCmd As New SqlCommand("INSERT INTO RolePermissionMap (RoleName, PermissionId, IsAllowed) VALUES (@RoleName, @PermissionId, 1)", conn)
+                    Dim insertCmd As New SqlCommand("
+                        INSERT INTO RolePermissionMap (RoleName, PermissionId, IsAllowed) 
+                        VALUES (@RoleName, @PermissionId, 1)", conn)
                     insertCmd.Parameters.AddWithValue("@RoleName", roleName)
                     insertCmd.Parameters.AddWithValue("@PermissionId", permissionId)
                     insertCmd.ExecuteNonQuery()
@@ -84,7 +117,6 @@ Partial Public Class RoleFunctionManagement
             Next
         End Using
 
-        ' Reload
         LoadPermissionsForRole(roleName)
     End Sub
 

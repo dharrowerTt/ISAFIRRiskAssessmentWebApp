@@ -12,4 +12,76 @@ Option Explicit On
 
 
 Partial Public Class _Default
+
+    '''<summary>
+    '''pnlMetrics control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlMetrics As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''lblTotalFacilities control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblTotalFacilities As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblPendingAssessments control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblPendingAssessments As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblUserCount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblUserCount As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''pnlManageFacilities control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlManageFacilities As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pnlStartAssessment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlStartAssessment As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pnlUserManagement control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlUserManagement As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pnlReports control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlReports As Global.System.Web.UI.WebControls.Panel
 End Class
