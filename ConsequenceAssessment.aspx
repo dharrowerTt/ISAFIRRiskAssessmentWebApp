@@ -1,67 +1,73 @@
 ﻿<%@ Page Title="Consequence Assessment" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ConsequenceAssessment.aspx.vb" Inherits="ISAFIRRiskAssessmentWebApp.ConsequenceAssessment" %>
 
+<asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
+</asp:Content>
+
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container py-4">
-    <h2 class="mb-3">Consequence Assessment</h2>
+    <h2 class="mb-4">Consequence Assessment</h2>
 
-    <!-- Assessment Info -->
-    <div class="mb-3">
-        <strong>Assessment #:</strong> <asp:Literal ID="litAssessmentID" runat="server" /><br />
-        <strong>Facility:</strong> <asp:Literal ID="litFacility" runat="server" /><br />
-        <strong>Assessor:</strong> <asp:Literal ID="litAssessor" runat="server" /><br />
-        <strong>Phone/Email:</strong> <asp:Literal ID="litContact" runat="server" /><br />
-        <strong>Assessment Started:</strong> <asp:Literal ID="litStartDate" runat="server" />
-    </div>
+    <uc:AssessmentProgress ID="ucProgress" runat="server" CurrentStep="consequence" />
 
-    <div class="table-wrapper">
-        <!-- Help Display -->
+    <div class="card p-4 shadow-sm">
+        <!-- Assessment Info -->
+        <div class="mb-3">
+            <strong>Assessment #:</strong> <asp:Literal ID="litAssessmentID" runat="server" /><br />
+            <strong>Facility:</strong> <asp:Literal ID="litFacility" runat="server" /><br />
+            <strong>Assessor:</strong> <asp:Literal ID="litAssessor" runat="server" /><br />
+            <strong>Phone/Email:</strong> <asp:Literal ID="litContact" runat="server" /><br />
+            <strong>Assessment Started:</strong> <asp:Literal ID="litStartDate" runat="server" />
+        </div>
+
+        <div class="table-wrapper">
+            <!-- Help Display -->
 <div id="impactHelpBox" class="alert alert-secondary sticky-help">
 
     <strong>Impact Info:</strong>
     <div id="impactHelpTextWrapper" style="transition: max-height 0.3s ease, opacity 0.3s ease;">
-        <div id="impactHelpText">Click a “?” button to view an explanation for that column.</div>
+        <div id="impactHelpText">Click a "?" button to view an explanation for that column.</div>
     </div>
 </div>
 
 
-    <!-- Consequence Matrix -->
-    <asp:Repeater ID="rptConsequence" runat="server">
-        <HeaderTemplate>
-            <table id="consequenceTable" class="table table-bordered align-middle text-center">
+        <!-- Consequence Matrix -->
+        <asp:Repeater ID="rptConsequence" runat="server">
+            <HeaderTemplate>
+                <table id="consequenceTable" class="table table-bordered align-middle text-center">
 
-                <thead>
-                    <tr>
-                        <th rowspan="3" class="align-middle text-start">Threat</th>
-                       <th colspan="<%= ImpactCount %>">Impact Categories</th>
+                    <thead>
+                        <tr>
+                            <th rowspan="3" class="align-middle text-start">Threat</th>
+                           <th colspan="<%= ImpactCount %>">Impact Categories</th>
 
-                    </tr>
-                    <tr>
-                        <%# GetImpactHeaders() %>
-                    </tr>
-                    <tr>
-                        <%# GetHelperButtons() %>
-                    </tr>
-                    <tr class="bulk-row">
-                        <td class="text-start"><strong>Bulk Entry</strong></td>
-                        <%# GetBulkInputs() %>
-                    </tr>
-                </thead>
-                <tbody>
-        </HeaderTemplate>
+                        </tr>
+                        <tr>
+                            <%# GetImpactHeaders() %>
+                        </tr>
+                        <tr>
+                            <%# GetHelperButtons() %>
+                        </tr>
+                        <tr class="bulk-row">
+                            <td class="text-start"><strong>Bulk Entry</strong></td>
+                            <%# GetBulkInputs() %>
+                        </tr>
+                    </thead>
+                    <tbody>
+            </HeaderTemplate>
 
-        <ItemTemplate>
-            <tr>
-                <td class="text-start"><%# Eval("ThreatName") %></td>
-                <%# GetConsequenceInputs(Container.DataItem) %>
-            </tr>
-        </ItemTemplate>
+            <ItemTemplate>
+                <tr>
+                    <td class="text-start"><%# Eval("ThreatName") %></td>
+                    <%# GetConsequenceInputs(Container.DataItem) %>
+                </tr>
+            </ItemTemplate>
 
-        <FooterTemplate>
-                </tbody>
-            </table>
-        </FooterTemplate>
-    </asp:Repeater>
+            <FooterTemplate>
+                    </tbody>
+                </table>
+            </FooterTemplate>
+        </asp:Repeater>
         </div>
 
     <div class="mt-4 text-end">
@@ -72,6 +78,7 @@
 
     <!-- Hidden Fields -->
     <asp:HiddenField ID="hfAssessmentID" runat="server" />
+    </div>
 </div>
 
 <!-- Scripts and Styling -->
@@ -101,8 +108,7 @@ $(document).ready(function () {
 });
 
     function showHelp(index) {
-        const helpTextMap = <%= HelpTextJSArray %>;
-
+        const helpTextMap = JSON.parse('<%= HelpTextJSArray %>');
         const helpText = helpTextMap[index - 1] || "No help text available.";
 
         // Animate helper box content change

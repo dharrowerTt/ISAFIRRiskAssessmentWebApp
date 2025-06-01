@@ -81,7 +81,50 @@ Partial Class LifelineAssessment
             Return
         End If
 
-        ' TODO: Parse and save user inputs for top-level toggles and sub-lifeline impact levels
-        ' You can collect the data via hidden fields or form posts via JS.
+        Using conn As New SqlConnection(connString)
+            conn.Open()
+            
+            ' Clear existing lifeline data for this assessment
+            Dim clearCmd As New SqlCommand("DELETE FROM LifelineAssessment WHERE assessment_id = @AID", conn)
+            clearCmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+            clearCmd.ExecuteNonQuery()
+
+            ' Save top-level lifeline toggles
+            For Each row As RepeaterItem In rptTopLevelLifelines.Items
+                Dim lifelineId As Integer = Convert.ToInt32(DataBinder.Eval(row.DataItem, "ID"))
+                Dim toggle As CheckBox = row.FindControl($"chkLifeline_{lifelineId}")
+                
+                If toggle IsNot Nothing Then
+                    Dim cmd As New SqlCommand("
+                        INSERT INTO LifelineAssessment (assessment_id, lifeline_id, is_selected)
+                        VALUES (@AID, @LID, @Selected)", conn)
+                    
+                    cmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+                    cmd.Parameters.AddWithValue("@LID", lifelineId)
+                    cmd.Parameters.AddWithValue("@Selected", toggle.Checked)
+                    cmd.ExecuteNonQuery()
+                End If
+            Next
+
+            ' Save sub-lifeline impact levels
+            For Each row As RepeaterItem In rptSubLifelines.Items
+                Dim lifelineId As Integer = Convert.ToInt32(DataBinder.Eval(row.DataItem, "ID"))
+                Dim impactLevel As DropDownList = row.FindControl($"ddlImpact_{lifelineId}")
+                
+                If impactLevel IsNot Nothing AndAlso Not String.IsNullOrEmpty(impactLevel.SelectedValue) Then
+                    Dim cmd As New SqlCommand("
+                        INSERT INTO LifelineAssessment (assessment_id, lifeline_id, impact_level)
+                        VALUES (@AID, @LID, @Impact)", conn)
+                    
+                    cmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+                    cmd.Parameters.AddWithValue("@LID", lifelineId)
+                    cmd.Parameters.AddWithValue("@Impact", Convert.ToInt32(impactLevel.SelectedValue))
+                    cmd.ExecuteNonQuery()
+                End If
+            Next
+        End Using
+
+        ' Navigate to Vulnerability Assessment
+        Response.Redirect($"VulnerabilitySection.aspx?assessment_id={hfAssessmentID.Value}")
     End Sub
 End Class

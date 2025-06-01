@@ -5,10 +5,15 @@
 
 <%@ Import Namespace="System.Data" %>
 
+<asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
+</asp:Content>
+
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
 <div class="container py-4">
 
     <h2 class="mb-3">Lifeline Assessment</h2>
+
+    <uc:AssessmentProgress ID="ucProgress" runat="server" CurrentStep="lifeline" />
 
     <!-- Assessment Info -->
     <div class="mb-3">

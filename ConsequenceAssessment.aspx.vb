@@ -72,7 +72,38 @@ Partial Class ConsequenceAssessment
             Return
         End If
 
-        ' Actual DB save logic goes here...
+        ' Save consequence data
+        Using conn As New SqlConnection(connString)
+            conn.Open()
+            
+            ' Clear existing consequences for this assessment
+            Dim clearCmd As New SqlCommand("DELETE FROM Consequence WHERE assessment_id = @AID", conn)
+            clearCmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+            clearCmd.ExecuteNonQuery()
+
+            ' Insert new consequences
+            For Each row As RepeaterItem In rptConsequence.Items
+                Dim threatId As Integer = Convert.ToInt32(DataBinder.Eval(row.DataItem, "ThreatID"))
+                
+                For i As Integer = 1 To ImpactCategories.Count
+                    Dim input As TextBox = row.FindControl($"c_{threatId}_{i}")
+                    If input IsNot Nothing AndAlso Not String.IsNullOrEmpty(input.Text) Then
+                        Dim cmd As New SqlCommand("
+                            INSERT INTO Consequence (assessment_id, threat_id, impact_id, rating)
+                            VALUES (@AID, @TID, @IID, @Rating)", conn)
+                        
+                        cmd.Parameters.AddWithValue("@AID", Convert.ToInt32(hfAssessmentID.Value))
+                        cmd.Parameters.AddWithValue("@TID", threatId)
+                        cmd.Parameters.AddWithValue("@IID", i)
+                        cmd.Parameters.AddWithValue("@Rating", Convert.ToInt32(input.Text))
+                        cmd.ExecuteNonQuery()
+                    End If
+                Next
+            Next
+        End Using
+
+        ' Navigate to Lifeline Assessment
+        Response.Redirect($"LifelineAssessment.aspx?assessment_id={hfAssessmentID.Value}")
     End Sub
 
 
